@@ -22,13 +22,10 @@ public class QueryCurrency {
 
     try {
       HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
       return new Gson().fromJson(response.body(), Currency.class);
 
     } catch (Exception e) {
-
       throw new RuntimeException("Error: " + e);
-
     }
 
   }
