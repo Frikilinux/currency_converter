@@ -1,11 +1,17 @@
 package ar.systec;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+
+import ar.systec.models.Codes;
+import ar.systec.models.QueryCodes;
 import ar.systec.models.QueryCurrency;
 
 public class Main {
     public static void main(String[] args) {
         QueryCurrency query = new QueryCurrency();
+        QueryCodes codes = new QueryCodes();
         Scanner input = new Scanner(System.in);
 
         String banner = """
@@ -15,7 +21,7 @@ public class Main {
         String menu = """
                 Opciones
                 1 - Convertir a una moneda.
-                2 - No se
+                2 - Get codes
                 0 - Salir.
                     """;
 
@@ -35,7 +41,36 @@ public class Main {
                     System.out.print("Escribe el monto: ");
                     double amount = input.nextDouble();
 
-                    System.out.println(query.getCurrency(base_currency, target_currency, amount));
+                    var resultado = query.getCurrency(base_currency, target_currency, amount);
+
+                    // System.out.println(query.getCurrency(base_currency, target_currency,
+                    // amount));
+                    System.out.println("");
+                    System.out.printf("El resultado es $ %.2f", resultado.conversion_result());
+                    break;
+                case 2:
+                    System.out.println("Lista de todas las monedas soportadas: ");
+                    var currencyCodes = new ArrayList<>(codes.getCodes().supported_codes());
+
+                    System.out.println();
+
+                    for (int i = 0; i < currencyCodes.size(); i++) {
+
+                        System.out.printf("%s - %-36s\t%s", currencyCodes.get(i)[0], currencyCodes.get(i)[1],
+                                (i + 1) % 3 == 0 ? "\n" : "");
+
+                    }
+
+                    // System.out.println(currencyCodes.size());
+
+                    // for (String[] code : currencyCodes) {
+
+                    // }
+
+                    // currencyCodes.forEach(currency -> {
+                    // System.out.printf("%s - %s\n", currency[0], currency[1]);
+                    // });
+
                     break;
                 default:
                     break;
