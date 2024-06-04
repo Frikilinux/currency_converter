@@ -10,7 +10,7 @@ import com.google.gson.Gson;
 import io.github.cdimascio.dotenv.Dotenv;
 
 public class QueryCurrency {
-  public Currency getCurrency(String base_currency, String target_currency, double amount) {
+  public ConversionDTO getCurrency(String base_currency, String target_currency, double amount) {
     Dotenv dotenv = Dotenv.load();
     String apiKey = dotenv.get("API_KEY");
 
@@ -22,7 +22,7 @@ public class QueryCurrency {
 
     try {
       HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-      return new Gson().fromJson(response.body(), Currency.class);
+      return new Gson().fromJson(response.body(), ConversionDTO.class);
 
     } catch (Exception e) {
       throw new RuntimeException("Error: " + e);
