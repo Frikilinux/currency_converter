@@ -3,7 +3,6 @@ package ar.systec;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import com.google.gson.Gson;
 
@@ -22,7 +21,6 @@ public class Main {
     private static List<String[]> codeList = obtenerCodigos().getSupported_codes();
 
     public static void main(String[] args) {
-        Scanner input = new Scanner(System.in);
         int option = -1;
 
         // String banner = """
@@ -62,11 +60,11 @@ public class Main {
                     break;
                 case 2:
                     System.out.print("Ingresa una moneda: ej.: ARS, USD, EUR: ");
-                    String base_currency = input.next();
+                    String base_currency = userInput();
                     System.out.print("A que moneda convertir? ej.: ARS, USD, EUR: ");
-                    String target_currency = input.next();
+                    String target_currency = userInput();
                     System.out.print("Escribe el monto: ");
-                    double amount = input.nextDouble();
+                    Double amount = Double.parseDouble(userInput());
 
                     var resultado = obtenerconversion(base_currency, target_currency, amount);
                     resultado.setBase_amount(amount);
