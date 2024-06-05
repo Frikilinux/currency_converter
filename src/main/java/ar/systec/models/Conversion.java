@@ -1,6 +1,6 @@
 package ar.systec.models;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 public class Conversion {
   String result;
@@ -8,7 +8,7 @@ public class Conversion {
   String target_code;
   double conversion_rate;
   double conversion_result;
-  LocalDate date;
+  Date date;
   double base_amount;
 
   public double getBase_amount() {
@@ -19,7 +19,7 @@ public class Conversion {
     this.base_amount = base_amount;
   }
 
-  public LocalDate getDate() {
+  public Date getDate() {
     return date;
   }
 
@@ -49,6 +49,6 @@ public class Conversion {
     this.target_code = conversionQuery.target_code();
     this.conversion_rate = conversionQuery.conversion_rate();
     this.conversion_result = conversionQuery.conversion_result();
-    this.date = LocalDate.now();
+    this.date = new Date();
   }
 }

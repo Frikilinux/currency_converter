@@ -1,6 +1,9 @@
 package ar.systec;
 
+import java.io.IOError;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -17,31 +20,40 @@ import io.github.cdimascio.dotenv.Dotenv;
 public class Main {
     private static String API_KEY = Dotenv.load().get("API_KEY");
     private static List<Conversion> conversions = new ArrayList<>();
+    private static SimpleDateFormat dateFormatted = new SimpleDateFormat("HH:mm dd-MM-yyy");
+    private static List<String[]> codeList = obtenerCodigos().getSupported_codes();
 
     public static void main(String[] args) {
-        Codes codesSupported = obtenerCodigos();
+        // Codes codesSupported = obtenerCodigos();
         Scanner input = new Scanner(System.in);
+        int option = -1;
 
-        String banner = """
+        // String banner = """
 
-                """;
+        // """;
 
         String menu = """
-                Opciones
                 1 - Obtener lista de monedas soportadas.
                 2 - Convertir a una moneda.
                 3 - Listar todas las conversiones.
+                -----------------------------------------
                 0 - Salir.
                     """;
 
-        while (true) {
-            int option;
-            System.out.println(banner);
+        while (option != 0) {
+            System.out.println(CliColors.PURPLE_BOLD_BRIGHT + "\nMenú de opciones\n" + CliColors.RESET);
             System.out.println(menu);
-            var codeList = codesSupported.getSupported_codes();
 
-            System.out.print("Ingrese una opción: ");
-            option = input.nextInt();
+            try {
+                System.out.print("Intrduce una opción: ");
+                option = Integer.parseInt(userInput());
+            } catch (NumberFormatException e) {
+                System.out.println(CliColors.RED_BOLD_BRIGHT + "\n Introduce sólo numeros!" + CliColors.RESET);
+                option = -1;
+            } catch (Exception e) {
+                System.out.println("Error desconocido" + e);
+            }
+
             switch (option) {
                 case 1:
                     System.out.println("\nLista de todas las monedas soportadas: ");
@@ -64,31 +76,44 @@ public class Main {
                     resultado.setBase_amount(amount);
                     conversions.add(resultado);
 
-                    var tipoDemoneda = codeList.stream().filter(c -> c[0].equalsIgnoreCase(target_currency)).toList();
-                    var monedaSelecionada = tipoDemoneda.get(0)[1];
+                    // var tipoDemoneda = codeList.stream().filter(c ->
+                    // c[0].equalsIgnoreCase(target_currency)).toList();
+                    // var monedaSelecionada = tipoDemoneda.get(0)[1];
                     System.out.println("");
                     System.out.printf("El monto corresponde a " + CliColors.RED + "%.2f" + CliColors.RESET + " %s ",
-                            resultado.getConversion_result(), monedaSelecionada);
+                            resultado.getConversion_result(), obtenerNombreDeMoneda(target_currency));
+
+                    // System.out.println(dateFormatted.format(resultado.getDate()));
                     break;
                 case 3:
-                    System.out.println("Lista de todas las conversiones: ");
+                    System.out.println(
+                            CliColors.WHITE_BOLD_BRIGHT + "\nHistorial de conversiones: " + CliColors.RESET);
                     for (int i = 0; i < conversions.size(); i++) {
-                        var conversion = conversions.get(i);
+                        var conv = conversions.get(i);
                         System.out.printf(
-                                "\n" + conversion.getDate() + " - Conversion de " + conversion.getBase_amount());
+                                "\n%s - %.2f %s " + CliColors.CYAN_BOLD_BRIGHT + "➔" + CliColors.RESET + "  %.2f %s",
+                                dateFormatted.format(conv.getDate()), conv.getBase_amount(),
+                                obtenerNombreDeMoneda(conv.getBase_code()), conv.getConversion_result(),
+                                obtenerNombreDeMoneda(conv.getTarget_code()));
                     }
                     break;
 
                 default:
+                    System.out.println(CliColors.YELLOW + "\nOpción desconocida!, intenta otra vez." + CliColors.RESET);
                     break;
-            }
-
-            if (option == 0) {
-                System.out.println("Hasta luego perro!");
-                break;
             }
         }
 
+        System.out.println("Hasta luego perro!");
+
+    }
+
+    public static String userInput() {
+        return System.console().readLine();
+    }
+
+    public static String obtenerNombreDeMoneda(String code) {
+        return codeList.stream().filter(c -> c[0].equalsIgnoreCase(code)).toList().get(0)[1];
     }
 
     public static <T> T conversorDTO(String json, Class<T> clase) {
@@ -104,7 +129,7 @@ public class Main {
 
     public static Conversion obtenerconversion(String base_currency, String target_currency, double amount) {
         var response = QueryApi.getData("https://v6.exchangerate-api.com/v6/" + API_KEY + "/pair/" + base_currency + "/"
-                + target_currency + "/" + amount);
+                + target_currency + "/" + String.format("%.0f", amount));
         var conversionQuery = conversorDTO(response, ConversionDTO.class);
         return new Conversion(conversionQuery);
     }
