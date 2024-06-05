@@ -1,9 +1,7 @@
 package ar.systec;
 
-import java.io.IOError;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -24,7 +22,6 @@ public class Main {
     private static List<String[]> codeList = obtenerCodigos().getSupported_codes();
 
     public static void main(String[] args) {
-        // Codes codesSupported = obtenerCodigos();
         Scanner input = new Scanner(System.in);
         int option = -1;
 
@@ -71,19 +68,14 @@ public class Main {
                     System.out.print("Escribe el monto: ");
                     double amount = input.nextDouble();
 
-                    // var resultado = query.getCurrency(base_currency, target_currency, amount);
                     var resultado = obtenerconversion(base_currency, target_currency, amount);
                     resultado.setBase_amount(amount);
                     conversions.add(resultado);
 
-                    // var tipoDemoneda = codeList.stream().filter(c ->
-                    // c[0].equalsIgnoreCase(target_currency)).toList();
-                    // var monedaSelecionada = tipoDemoneda.get(0)[1];
                     System.out.println("");
                     System.out.printf("El monto corresponde a " + CliColors.RED + "%.2f" + CliColors.RESET + " %s ",
                             resultado.getConversion_result(), obtenerNombreDeMoneda(target_currency));
 
-                    // System.out.println(dateFormatted.format(resultado.getDate()));
                     break;
                 case 3:
                     System.out.println(
