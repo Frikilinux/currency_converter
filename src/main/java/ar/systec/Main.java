@@ -10,8 +10,8 @@ import ar.systec.models.Codes;
 import ar.systec.models.CodesDTO;
 import ar.systec.models.Conversion;
 import ar.systec.models.ConversionDTO;
-import ar.systec.models.QueryApi;
 import ar.systec.service.CliColors;
+import ar.systec.service.QueryApi;
 import io.github.cdimascio.dotenv.Dotenv;
 
 public class Main {
@@ -75,6 +75,9 @@ public class Main {
                     Double amount = Double.parseDouble(userInput());
 
                     var resultado = obtenerconversion(base_currency, target_currency, amount);
+                    if (resultado == null) {
+                        break;
+                    }
                     resultado.setBase_amount(amount);
                     conversions.add(resultado);
 
@@ -131,6 +134,11 @@ public class Main {
         var response = QueryApi.getData(API_URL + API_KEY + "/pair/" + base_currency + "/"
                 + target_currency + "/" + String.format("%.0f", amount));
         var conversionQuery = conversorDTO(response, ConversionDTO.class);
+
+        if (conversionQuery.result().equals("error")) {
+            System.out.println(CliColors.RED_BOLD + "\nError en la consulta, trata otra vez.\n" + CliColors.RESET);
+            return null;
+        }
         return new Conversion(conversionQuery);
     }
 }
