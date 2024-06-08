@@ -43,6 +43,7 @@ public class Main {
                     """;
 
         while (option != 0) {
+            System.out.println("");
             System.out.println(CliColors.GREEN + banner + CliColors.RESET);
             System.out.println(CliColors.PURPLE_BOLD_BRIGHT + "Menú de opciones\n" + CliColors.RESET);
             System.out.println(menu);
@@ -59,7 +60,8 @@ public class Main {
 
             switch (option) {
                 case 1:
-                    System.out.println("\nLista de todas las monedas soportadas: ");
+                    System.out.println(CliColors.WHITE_BOLD_BRIGHT + "\nLista de todas las monedas soportadas: "
+                            + CliColors.RESET);
                     for (int i = 0; i < codeList.size(); i++) {
 
                         System.out.printf(CliColors.GREEN + "%s" + CliColors.RESET + " - %-36s\t%s",
