@@ -1,8 +1,26 @@
 # Conversor de monedas
 
-Convierte cualquier moneda soportada utilizando https://www.exchangerate-api.com/
+Convierte cualquier moneda soportada utilizando https://www.exchangerate-api.com
+
+## Configuración
+
+Crear el archivo `.env` en la raíz del proyecto con el contenido:
+
+```markdown
+> [!IMPORTANT]
+> Reemplazar con una API Key válida desde https://www.exchangerate-api.com
+```
+
+```ini
+# .env
+API_KEY = fdef4234f34rt34wef34
+```
+
+
 
 ## Menú principal
+
+
 
 Selección de opciones disponibles
 
