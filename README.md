@@ -6,10 +6,8 @@ Convierte cualquier moneda soportada utilizando https://www.exchangerate-api.com
 
 Crear el archivo `.env` en la raíz del proyecto con el contenido:
 
-```markdown
 > [!IMPORTANT]
 > Reemplazar con una API Key válida desde https://www.exchangerate-api.com
-```
 
 ```ini
 # .env
